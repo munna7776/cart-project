@@ -77,6 +77,15 @@ class App extends Component {
 
     return count;
   }
+
+  getTotalPrice = ()=>{
+    const {products} = this.state;
+    let totalPrice = 0;
+    products.forEach((product)=>{
+      totalPrice = totalPrice + product.qty * product.price
+    })
+    return totalPrice;
+  }
   
   render(){
     const {products} = this.state;
@@ -89,6 +98,7 @@ class App extends Component {
           onDecreaseQuantity = {this.handleDecreaseQuantity}
           onDeleteProduct = {this.handleDeleteproduct}
         />
+        <div style={{ padding:10,fontSize:25 }}>Total : {this.getTotalPrice()}</div>
       </div>
     );
   }
