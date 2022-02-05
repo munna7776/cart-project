@@ -1,4 +1,5 @@
 import React from "react";
+import Cart from './img/shopping-cart.png'
 
 const Navbar = (props) => {
   return (
@@ -6,7 +7,7 @@ const Navbar = (props) => {
       <div style={styles.cartIconContainer}>
         <img
           style={styles.cartIcon}
-          src="https://cdn-icons.flaticon.com/png/512/2838/premium/2838895.png?token=exp=1643802333~hmac=3900efb845ceeea2f032c8674f4554d9"
+          src={Cart}
           alt="cart-icon"
         />
         <span style={styles.cartCount}>{props.count}</span>

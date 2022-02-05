@@ -1,91 +1,93 @@
-import React,{Component} from 'react';
-import './App.css';
+import {Component} from 'react';
 import Cart from './Cart';
 import Navbar from './Navbar';
+import { getFirestore, collection, deleteDoc,onSnapshot,updateDoc ,doc} from "firebase/firestore";
+
 
 class App extends Component {
     constructor(){
       super();
       this.state={
-          products:[
-              {
-                  id:1,
-                  title:'Xiomi',
-                  price:15999,
-                  qty : 1,
-                  img : '',
-              },
-              {
-                  id:2,
-                  title:'Oppo A54',
-                  price:16999,
-                  qty : 1,
-                  img : '',
-              },
-              {
-                  id:3,
-                  title:'Redmi 9 pro',
-                  price:9999,
-                  qty : 1,
-                  img : '',
-              },
-              {
-                  id:4,
-                  title:'iPhone 16s',
-                  price:155999,
-                  qty : 1,
-                  img : '',
-              },
-          ]
+          products:[]
       }
+      this.db = getFirestore();
   }
-  
+  componentDidMount(){
+    let collectionRef = collection(this.db,"products");
 
-  handleIncreaseQuantity = (product)=>{
-      const {products} = this.state;
-      const index = products.indexOf(product);
-      products[index].qty += 1;
-      this.setState({
-          products:products
+    onSnapshot(collectionRef,(snapshot)=>{
+      const products = snapshot.docs.map((doc)=>{
+        let data = doc.data();
+        data['id']=doc.id;
+        return data;
       })
-  }
-  handleDecreaseQuantity = (product)=>{
-      const {products} = this.state;
-      const index = products.indexOf(product);
-      if(products[index].qty === 0){
-          return;
-      }
-      products[index].qty -= 1;
       this.setState({
-          products:products
+        products : products
       })
-  }
-
-  handleDeleteproduct = (id)=>{
-      const {products} = this.state;
-      const items = products.filter(item => item.id !== id)
-      this.setState({
-          products:items
-      })
-  }
-  getCartCount = ()=>{
-    let count=0;
-    const {products} = this.state;
-    products.forEach((product)=>{
-      count += product.qty
     })
 
+  }
+
+  handleIncreaseQuantity = async(product)=>{
+    const {products} = this.state;
+    const index = products.indexOf(product);
+
+    const docRef = doc(this.db,"products",products[index].id);
+    updateDoc(docRef, {
+      qty:products[index].qty+1
+    }).then(()=>{
+      products[index].qty +=1 
+      this.setState({
+        products : products
+      })
+    }).catch((error)=>{console.log(error);})
+  }
+
+  handleDecreaseQuantity = async(product)=>{
+    const {products} = this.state;
+    const index = products.indexOf(product);
+
+    const docRef = doc(this.db,"products",products[index].id);
+    updateDoc(docRef, {
+      qty:products[index].qty-1
+    }).then(()=>{
+      products[index].qty -=1 
+      this.setState({
+        products : products
+      })
+    }).catch((error)=>{console.log(error.message);})
+  }
+
+  handleDeleteProduct = (id)=>{
+    const {products} = this.state;
+
+    const docRef = doc(this.db,"products",id);
+    deleteDoc(docRef).then(()=>{
+      const items = products.filter((product)=>product.id !== id)
+      this.setState({
+        products:items
+      })
+    }) 
+  }
+
+  getCartCount = ()=>{
+    const {products} = this.state;
+    let count=0;
+    products.forEach((product)=>{
+      count = count+product.qty
+    })
     return count;
   }
 
   getTotalPrice = ()=>{
     const {products} = this.state;
-    let totalPrice = 0;
+    let price=0;
     products.forEach((product)=>{
-      totalPrice = totalPrice + product.qty * product.price
+      price = price+product.price * product.qty
     })
-    return totalPrice;
+    return price;
   }
+
   
   render(){
     const {products} = this.state;
@@ -94,9 +96,9 @@ class App extends Component {
         <Navbar count={this.getCartCount()}/>
         <Cart 
           products={products}
-          onIncreaseQuantity = {this.handleIncreaseQuantity}
-          onDecreaseQuantity = {this.handleDecreaseQuantity}
-          onDeleteProduct = {this.handleDeleteproduct}
+          handleIncreaseQuantity = {this.handleIncreaseQuantity}
+          handleDecreaseQuantity = {this.handleDecreaseQuantity}
+          handleDeleteProduct = {this.handleDeleteProduct}
         />
         <div style={{ padding:10,fontSize:25 }}>Total : {this.getTotalPrice()}</div>
       </div>

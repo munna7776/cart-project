@@ -3,16 +3,17 @@ import CartItem from './CartItem';
 import './index.css';
 
 const Cart = (props) => {
+    // console.log(props.products);
     return (
         <div className="cart">
             {props.products.map((product)=>{
                 return (
                     <CartItem 
-                        key={product.id}
+                        key = {product.id}
                         product={product}
-                        onIncreaseQuantity = {props.onIncreaseQuantity}
-                        onDecreaseQuantity = {props.onDecreaseQuantity}
-                        onDeleteProduct = {props.onDeleteProduct}
+                        onIncreaseQuantity = {props.handleIncreaseQuantity}
+                        onDecreaseQuantity = {props.handleDecreaseQuantity}
+                        onDeleteProduct = {props.handleDeleteProduct}
                     />
                 )
             })}

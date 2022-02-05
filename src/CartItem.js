@@ -4,12 +4,12 @@ import Plus from "./img/plus.png";
 import Minus from "./img/minus-sign.png";
 import Bin from "./img/bin.png";
 const CartItem = (props) => {
-  const { id, title, price, qty } = props.product;
-  const { product, onIncreaseQuantity, onDecreaseQuantity, onDeleteProduct } =   props;
+  const {title,price,qty,img} = props.product;
+  const { product, onIncreaseQuantity , onDecreaseQuantity, onDeleteProduct} =   props;
   return (
     <div className="cart-item">
       <div className="left-block">
-        <img style={styles.image} />
+        <img style={styles.image} src={img} />
       </div>
       <div className="right-block">
         <div style={{ fontSize: 25 }}>{title}</div>
