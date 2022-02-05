@@ -1,6 +1,11 @@
-# Getting Started with Create React App
+# Cart project is created using React Js and firebase also.
+Firebase is used for realtime increase and decrease the quantity and delete the product.
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Know more about Firebase
+[https://firebase.google.com/](https://firebase.google.com/)
+
+[YouTube link](https://www.youtube.com/playlist?list=PL4cUxeGkcC9jERUGvbudErNCeSZHWUVlb)
+
 
 ## Available Scripts
 
